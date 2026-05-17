@@ -24,6 +24,7 @@ telemetry/
 # ── 캐시 (런타임에 자동 재생성) ──
 cache/
 downloads/
+paste-cache/
 
 # ── 플러그인 캐시 (enabledPlugins로 자동 재설치됨) ──
 plugins/cache/
