@@ -1,0 +1,41 @@
+# ── 인증/시크릿 (절대 커밋 금지) ──
+.credentials.json
+*.key
+*.pem
+
+# ── 머신/세션별 로컬 상태 ──
+settings.local.json
+.last-cleanup
+hook.log
+*.log
+history.jsonl
+mcp-needs-auth-cache.json
+stats-cache.json
+
+# ── 대화/세션 히스토리 (개인 데이터, 용량 큼) ──
+projects/
+sessions/
+session-env/
+shell-snapshots/
+file-history/
+backups/
+telemetry/
+
+# ── 캐시 (런타임에 자동 재생성) ──
+cache/
+downloads/
+
+# ── 플러그인 캐시 (enabledPlugins로 자동 재설치됨) ──
+plugins/cache/
+plugins/data/
+plugins/marketplaces/
+plugins/install-counts-cache.json
+plugins/installed_plugins.json
+plugins/known_marketplaces.json
+
+# ── 작업 중인 임시 산출물 ──
+plans/
+
+# ── OS 노이즈 ──
+.DS_Store
+Thumbs.db

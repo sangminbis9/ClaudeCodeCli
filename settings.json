@@ -1,0 +1,118 @@
+{
+  "env": {
+    "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
+    "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "WebSearch",
+      "mcp__edu-cal__*"
+    ],
+    "deny": [
+      "Bash(*rm -rf *)",
+      "Bash(*killall *)",
+      "Bash(*sudo *)",
+      "Bash(*git push --force*)",
+      "Bash(*npm publish*)",
+      "Bash(*dd *)",
+      "Bash(*mkfs *)",
+      "Bash(*shutdown*)",
+      "Bash(*reboot*)",
+      "Bash(*poweroff*)",
+      "Bash(*fdisk*)",
+      "Bash(*diskutil erase*)",
+      "Bash(*diskutil partitionDisk*)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Read(~/.ssh/**)"
+    ],
+    "ask": [
+      "Bash(*rm *)",
+      "Bash(*curl *)",
+      "Bash(*wget *)",
+      "Bash(*git push *)",
+      "Bash(*git reset --hard*)",
+      "Bash(*git clean -f*)",
+      "Bash(*pkill *)",
+      "Bash(*chmod *)",
+      "Bash(*chown *)",
+      "Bash(*ssh *)",
+      "Bash(*scp *)",
+      "Bash(*launchctl *)",
+      "Bash(*crontab *)"
+    ]
+  },
+  "model": "opus",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/format-touched-file.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/guard-bash.py",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/suggest-rg.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/check-user-prompt.py",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh"
+  },
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "figma@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "vercel@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "planning-with-files@planning-with-files": true
+  },
+  "extraKnownMarketplaces": {
+    "planning-with-files": {
+      "source": {
+        "source": "github",
+        "repo": "OthmanAdi/planning-with-files"
+      }
+    }
+  },
+  "language": "한국어",
+  "effortLevel": "high"
+}
