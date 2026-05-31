@@ -1,5 +1,21 @@
 #!/usr/bin/env bash
-cmd=$(jq -r '.tool_input.command // ""')
-if echo "$cmd" | grep -qE '(^|[^[:alpha:]])grep([^[:alpha:]]|$)'; then
-    echo '{"continue": false, "stopReason": "grep 대신 rg를 사용하세요. 이 프로젝트에서는 빠른 검색을 위해 ripgrep 사용을 권장합니다."}'
+input=$(cat)
+cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // ""')
+
+new_cmd=$(printf '%s' "$cmd" | perl -pe '
+    s/\bgit\s+grep\b/\x00GITGREP\x00/g;
+    s/--grep/\x00DDGREP\x00/g;
+    s/\bgrep\b/rg/g;
+    s/\x00GITGREP\x00/git grep/g;
+    s/\x00DDGREP\x00/--grep/g;
+')
+
+if [ "$cmd" != "$new_cmd" ]; then
+    jq -nc --arg cmd "$new_cmd" '{
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        updatedInput: {command: $cmd}
+      },
+      systemMessage: ("grep → rg 자동 치환: " + $cmd)
+    }'
 fi

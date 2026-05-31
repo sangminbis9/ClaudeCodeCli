@@ -10,10 +10,8 @@
       "mcp__edu-cal__*"
     ],
     "deny": [
-      "Bash(*rm -rf *)",
       "Bash(*killall *)",
       "Bash(*sudo *)",
-      "Bash(*git push --force*)",
       "Bash(*npm publish*)",
       "Bash(*dd *)",
       "Bash(*mkfs *)",
@@ -29,12 +27,10 @@
       "Read(~/.ssh/**)"
     ],
     "ask": [
+      "Bash(*rm -rf *)",
       "Bash(*rm *)",
       "Bash(*curl *)",
       "Bash(*wget *)",
-      "Bash(*git push *)",
-      "Bash(*git reset --hard*)",
-      "Bash(*git clean -f*)",
       "Bash(*pkill *)",
       "Bash(*chmod *)",
       "Bash(*chown *)",
@@ -46,27 +42,11 @@
   },
   "model": "opus",
   "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/format-touched-file.sh",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
+    "PostToolUse": [],
     "PreToolUse": [
       {
         "matcher": "Bash",
         "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/guard-bash.py",
-            "timeout": 30
-          },
           {
             "type": "command",
             "command": "~/.claude/hooks/suggest-rg.sh",
@@ -75,13 +55,23 @@
         ]
       }
     ],
-    "UserPromptSubmit": [
+    "UserPromptSubmit": [],
+    "Notification": [
       {
+        "matcher": "idle_prompt",
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/check-user-prompt.py",
-            "timeout": 30
+            "command": "printf '{\"terminalSequence\":\"\\u0007\"}'"
+          }
+        ]
+      },
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '{\"terminalSequence\":\"\\u0007\"}'"
           }
         ]
       }
@@ -114,5 +104,6 @@
     }
   },
   "language": "한국어",
-  "effortLevel": "high"
+  "effortLevel": "high",
+  "preferredNotifChannel": "terminal_bell"
 }
